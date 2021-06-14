@@ -13,7 +13,6 @@ const io = socketIO(server, {
         origin: '*',
     },
 });
-console.log(process.env.ORIGINS);
 const url = 'mongodb://127.0.0.1:27017/';
 var roomHashTable = {};
 
@@ -69,20 +68,6 @@ app.get('/', (request, response) => {
 //
 //}}
 
-/*
-const insertRecordIntoCollection = (rec, coll) => {
-  // mongoClient.connect(url, (err, db) => {
-  mongoClient.connect(mongoDBStrings.connectionString, (err, db) => {
-    if (err) throw err;
-    var dbo = db.db("guesstimoji");
-    dbo.collection(coll).insertOne(rec, (err, res) => {
-      if (err) throw err;
-      console.log("1 document inserted");
-      db.close();
-    });
-  });
-}
-*/
 const validateBoardIndex = (index) => {
     if (typeof index != 'number') {
         console.log('Invalid index type %s', typeof index);
@@ -193,7 +178,6 @@ const validateObject = (data, valid) => {
 io.sockets.on('connection', (socket) => {
     socket.on('client:rooms/roomsRequested', () => {
         const roomIds = Object.keys(roomHashTable);
-        console.log('rooms requested');
         // only show roomIds for which the room is not full
         socket.emit(
             'server:rooms/roomsResponded',
@@ -211,13 +195,14 @@ io.sockets.on('connection', (socket) => {
         const serverFull =
             Object.keys(roomHashTable).length > utils.ROOMHASHTABLE_MAX_ENTRIES;
         if (serverFull) {
-            console.log('Server full.');
             socket.emit('server:room/roomJoined', null);
             return;
         }
         socket.join(roomID);
         // entry shouldn't be deleted if room is full
         socket.on('disconnect', () => {
+            console.log(roomHashTable[roomID]);
+
             // one player disconnected from the game
             if (roomHashTable[roomID].roomFull === true) {
                 socket.to(roomID).emit('server:room/roomJoined', {
@@ -228,8 +213,7 @@ io.sockets.on('connection', (socket) => {
                 // player 1 disconnected
                 if (roomHashTable[roomID].players[1].socketID === socket.id) {
                     // player 2 now player 1
-                    roomHashTable[roomID].players[1] =
-                        roomHashTable[roomID].players[2];
+                    roomHashTable[roomID].players[1] = roomHashTable[roomID].players[2];
                 }
                 roomHashTable[roomID].players[2] = {
                     username: 'Player 2',
@@ -241,8 +225,10 @@ io.sockets.on('connection', (socket) => {
             } else {
                 delete roomHashTable[roomID];
             }
-            console.log(roomHashTable);
+
+            console.log(roomHashTable[roomID]);
         });
+        socket.on('client:room/roomLeft', socket.disconnect);
         if (roomHashTable[roomID]) {
             // if this is defined
             // the room has a player
@@ -287,7 +273,6 @@ io.sockets.on('connection', (socket) => {
                 roomFull: false,
                 player: 1,
             });
-            console.log('roomHashTable', roomHashTable);
         }
 
         socket.on('client:gameLog/turnSubmitted', (turnData) => {
@@ -372,7 +357,6 @@ io.sockets.on('connection', (socket) => {
                           }
                 );
             }
-            console.log(roomHashTable);
         });
         socket.on('client:players/picked', (pickData) => {
             if (!validateObject(pickData, utils.PICKDATA_TYPES)) {
@@ -384,10 +368,8 @@ io.sockets.on('connection', (socket) => {
             if (roomHashTable[roomID].players[1].pick && roomHashTable[roomID].players[2].pick) {
                 io.in(roomID).emit('server:room/allPlayersBecameReady', {});
             }
-            console.log(roomHashTable[roomID].players[player]);
         });
         socket.on('client:players/reset', (resetData) => {
-            console.log('Trying to reset', resetData);
             if (!validateObject(resetData, utils.RESETDATA_TYPES)) {
                 return;
             }

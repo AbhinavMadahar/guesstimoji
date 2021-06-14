@@ -3,6 +3,7 @@ import RoomName from './RoomName';
 import OpponentBoard from './OpponentBoard';
 import Board from './Board';
 import GameLog from './GameLog';
+import LeaveRoomButton from './LeaveRoomButton';
 import queryString from 'query-string';
 import socket from '../socketlocal';
 import '../index.css';
@@ -45,6 +46,12 @@ const GamePage = ({
                 dispatch(clicked(index));
             });
         } else {
+            socket.off('server:gameLog/turnSubmitted');
+            socket.off('server:gameLog/restartGame');
+            socket.off('server:opponentBoard/clicked');
+        }
+
+        return () => {
             socket.off('server:gameLog/turnSubmitted');
             socket.off('server:gameLog/restartGame');
             socket.off('server:opponentBoard/clicked');
@@ -93,9 +100,10 @@ const GamePage = ({
                     winner={winner}
                     allPlayersReady={allPlayersReady}
                 />
-                {
-                    // Need 'Leave Room' button
-                }
+                <LeaveRoomButton
+                    socket={socket}
+                    roomID={roomID}
+                />
             </div>
         </div>
     );

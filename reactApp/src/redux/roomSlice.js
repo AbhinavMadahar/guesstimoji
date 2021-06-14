@@ -14,15 +14,17 @@ function makeid(length) {
     return result;
 }
 
+const defaultState = () => ({
+    roomID: makeid(5),
+    roomFull: false,
+    board: [],
+    randomSmiley: '😎',
+    restartable: false,
+    allPlayersReady: false,
+});
+
 export const roomReducer = (
-    state = {
-        roomID: makeid(5),
-        roomFull: false,
-        board: [],
-        randomSmiley: '😎',
-        restartable: false,
-        allPlayersReady: false,
-    },
+    state = defaultState(),
     action
 ) => {
     switch (action.type) {
@@ -46,6 +48,8 @@ export const roomReducer = (
                 ...state,
                 ...action.payload,
             };
+        case 'room/roomLeft':
+            return defaultState();
         case 'room/allPlayersBecameReady':
             return {
                 ...state,
@@ -81,6 +85,12 @@ export const roomRestarted = () => {
     return {
         type: 'room/roomRestarted',
         payload: { restartable: false, winner: undefined, allPlayersReady: false },
+    };
+};
+
+export const roomLeft = () => {
+    return {
+        type: 'room/roomLeft',
     };
 };
 
