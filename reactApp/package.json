@@ -33,14 +33,9 @@
     ]
   },
   "devDependencies": {
-    "@testing-library/dom": "^7.31.2",
-    "@testing-library/jest-dom": "^5.14.1",
-    "@testing-library/react": "^11.2.7",
     "eslint": "^7.29.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^3.4.0",
-    "jest-dom": "^4.0.0",
-    "prettier": "^2.3.1",
-    "testing-library": "0.0.2"
+    "prettier": "^2.3.1"
   }
 }
