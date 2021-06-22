@@ -1,6 +1,6 @@
 const graphQlApiUrl = 'http://localhost:3005/graphql';
 
-export const argsJsonStringify = (argsObject: any): string =>
+export const argsJsonStringify = (argsObject: JSON | null): string =>
     argsObject ?
         JSON.stringify(argsObject)
             .replace(/"([^"]+)":/g, '$1:') // removes quotes from keys
@@ -22,20 +22,23 @@ export const fetchGraphQLData = async (query: string) => {
     return json.data;
 }
 
-export const getEmojis = async (argsObject: string | null = null) => {
+export const getEmojis = async (argsObject: JSON | null = null) => {
     const args = argsJsonStringify(argsObject);
-    const query = `
-        {
-            getEmojis${args}{
-                emoji
-            }
-        }
-    `;
-    const promiseResult = await fetchGraphQLData(query);
-    return promiseResult?.getEmojis;
+    const query = `{ getEmojis${args}{ emoji } }`;
+    const emojis = await fetch(graphQlApiUrl, {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ query }),
+    });
+    const json = await emojis.json();
+    return json.data.getEmojis;
 };
 
-export const getBoards = async (query: string) => {
+export const getBoards = async () => {
+    const query = '{ getBoards{ emojis } }';
     const boards = await fetch(graphQlApiUrl, {
         method: 'POST',
         credentials: 'same-origin',

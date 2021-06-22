@@ -25,7 +25,7 @@ const App = ({
     player,
 }) => {
     useEffect(() => {
-        getBoards('{getBoards{emojis}}')
+        getBoards()
             .then((res) => res.map((x) => x.emojis))
             .then(gotBoards)
             .catch((err) => console.error(err));

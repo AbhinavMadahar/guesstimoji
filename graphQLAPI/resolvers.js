@@ -3,17 +3,6 @@ const { Emoji, Board } = require('./models.js');
 
 const resolvers = {
     Query: {
-        /*
-        async getEmojis() {
-            try {
-                const emojis = await Emoji.find({}).sort({ _id: 'asc' });
-                return emojis;
-            } catch (err) {
-                throw new Error(err);
-            }
-        }
-        */
-
         getEmojis(parent, args, context, info) {
             try {
                 const emojis = Emoji.find({ ...args });
