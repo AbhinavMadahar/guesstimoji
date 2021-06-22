@@ -1,0 +1,23 @@
+{
+    "name": "guesstimoji",
+    "version": "1.0.0",
+    "description": "A game where people guess emojis.",
+    "scripts": {
+        "test": "node_modules/.bin/jest",
+        "test:watch": "node_modules/.bin/jest --watch"
+    },
+    "keywords": [],
+    "author": "",
+    "dependencies": {
+        "@testing-library/dom": "^7.31.2",
+        "@testing-library/jest-dom": "^5.14.1",
+        "@testing-library/react": "^11.2.7",
+        "@testing-library/user-event": "^13.1.9",
+        "@types/jest": "^26.0.23",
+        "jest": "^27.0.5",
+        "jsdom": "^16.6.0",
+        "ts-jest": "^27.0.3",
+        "tslib": "^2.3.0",
+        "typescript": "^4.3.4"
+    }
+}
