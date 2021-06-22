@@ -3,7 +3,7 @@
 import { argsJsonStringify, addGetEmojiResponseAsBoard } from './apiUtils';
 
 test('Stringifies JSON arguments', () => {
-    expect(argsJsonStringify(undefined)).toEqual('');
+    expect(argsJsonStringify(null)).toEqual('');
     expect(argsJsonStringify({ a: 1 })).toEqual('(a:1)');
     expect(argsJsonStringify({ a: 1, b: false })).toEqual('(a:1,b:false)');
 });

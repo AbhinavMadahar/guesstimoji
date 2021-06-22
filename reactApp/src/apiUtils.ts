@@ -1,6 +1,6 @@
 const graphQlApiUrl = 'http://localhost:3005/graphql';
 
-export const argsJsonStringify = (argsObject: JSON | null): string =>
+export const argsJsonStringify = (argsObject: any): string =>
     argsObject ?
         JSON.stringify(argsObject)
             .replace(/"([^"]+)":/g, '$1:') // removes quotes from keys
