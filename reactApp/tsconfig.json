@@ -18,9 +18,14 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "removeComments": true,
+    "importHelpers": true
   },
   "include": [
     "src"
-  ]
+  ],
+  "paths": {
+    "tslib": ["to/node_modules/tslib/tslib.d.ts"]
+  },
 }
