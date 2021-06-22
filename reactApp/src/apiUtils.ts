@@ -1,18 +1,5 @@
 const graphQlApiUrl = 'http://localhost:3005/graphql';
 
-export const graphQlPost = async (query: string) => {
-    const res = await fetch(graphQlApiUrl, {
-        method: 'POST',
-        credentials: 'same-origin',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ query }),
-    });
-    const json = await res.json();
-    return json.data;
-};
-
 export const argsJsonStringify = (argsObject: any): string =>
     argsObject ?
         JSON.stringify(argsObject)
@@ -42,7 +29,7 @@ export const getEmojis = async (argsObject: string | null = null) => {
             getEmojis${args}{
                 emoji
             }
-        } 
+        }
     `;
     const promiseResult = await fetchGraphQLData(query);
     return promiseResult?.getEmojis;
@@ -61,19 +48,6 @@ export const getBoards = async (query: string) => {
     return json.data.getBoards;
 };
 
-const createBoard = async (mutation: any) => {
-    const board = await fetch(graphQlApiUrl, {
-        method: 'POST',
-        credentials: 'same-origin',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ query: mutation }),
-    });
-    const json = await board.json();
-    return json.data.getEmojis;
-};
-
 export const addGetEmojiResponseAsBoard = (array: any) =>
     // the beginning of query
     'mutation{createBoard(emojis: ["' +
@@ -81,7 +55,7 @@ export const addGetEmojiResponseAsBoard = (array: any) =>
     array
         .map((x: any) => x.emoji)
         // take only first 40 elements
-        .slice(80, 120)
+        .slice(0, 40)
         // create a string with elements
         .join('","') +
     '"]){emojis}}';
